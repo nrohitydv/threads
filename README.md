@@ -37,3 +37,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 In this project, I am learning to clone threads from javaScript Mastery youtube channel.
 Link="https://www.youtube.com/watch?v=O5cmLDVTgAs&t=328s"
+
+1st package
+$npm install @clerk/nextjs
+2nd
+$npm install @uploadthing/react mongoose svix uploadthing
