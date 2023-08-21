@@ -42,3 +42,6 @@ Link="https://www.youtube.com/watch?v=O5cmLDVTgAs&t=328s"
 $npm install @clerk/nextjs
 2nd
 $npm install @uploadthing/react mongoose svix uploadthing
+3rd
+$npx shadcn-ui@latest init
+$npx shadcn-ui@latest add form
