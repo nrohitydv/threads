@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
+import { useUploadThing } from "@/lib/uploadthing";
 import Image from "next/image";
 import {
   Form,
@@ -19,6 +20,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserValidation } from "@/lib/vallidations/user";
 import { ChangeEvent, useState } from "react";
+import { isBase64Image } from "@/lib/utils";
 
 interface Props {
   user: {
@@ -34,6 +36,7 @@ interface Props {
 
 const AccountProfile = ({ user, btnTitle }: Props) => {
   const [files, setFiles] = useState<File[]>([]);
+  const { startUpload } = useUploadThing("media");
   const form = useForm({
     resolver: zodResolver(UserValidation),
     defaultValues: {
@@ -48,7 +51,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
     fieldChange: (value: string) => void
   ) => {
     e.preventDefault();
-    //to chnage profile photo
+    //to change profile photo
     const fileReader = new FileReader();
 
     if (e.target.files && e.target.files.length > 0) {
@@ -66,11 +69,17 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
     }
   };
 
-  function onSubmit(values: z.infer<typeof UserValidation>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  const onSubmit = async (values: z.infer<typeof UserValidation>) => {
+    const blob = values.profile_photo;
+
+    const hasImageChanged = isBase64Image(blob);
+    if (hasImageChanged) {
+      const imgRes = await startUpload(files);
+      if (imgRes && imgRes[0].fileUrl) {
+        values.profile_photo = imgRes[0].fileUrl;
+      }
+    }
+  };
   return (
     <Form {...form}>
       <form
